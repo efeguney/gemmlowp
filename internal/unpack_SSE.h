@@ -82,11 +82,11 @@ struct UnpackResultImpl<BitDepthParams,
       int r = 0;
       for (; r < dst_rows_aligned4; r+=4, dst_ptr+=4, src_ptr+=4) {
         // Load/round raw_xx_xmm 
-        __m128i term_xx_xmm = _mm_load_si128((const __m128i*) src_ptr);
+        __m128i term_xx_xmm = _mm_loadu_si128((const __m128i*) src_ptr);
         SSERoundingMultiplyByConstantFraction<255 * 255, kLhsMax * kRhsMax> (&term_xx_xmm);
 
         // Load/round raw_x1_xmm 
-        __m128i term_x1_xmm = _mm_load_si128((const __m128i*) &(lhs_rank_one_update[r]));
+        __m128i term_x1_xmm = _mm_loadu_si128((const __m128i*) &(lhs_rank_one_update[r]));
         SSERoundingMultiplyByConstantFraction<255, kLhsMax> (&term_x1_xmm);
 
         // Sum 4 terms: term_11 + term_xx + term_x1 + term_1x
